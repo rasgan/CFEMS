@@ -44,7 +44,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 'label' => 'Production',
                 'items' => [
                      ['label' => 'Production Lines', 'url' => '/production-line'],
-                     ['label' => 'Level 1 - Dropdown B', 'url' => '#'],
+                     ['label' => 'Production Articles', 'url' => '/production-article'],
                 ],
             ],
             ['label' => 'About', 'url' => ['/site/about']],
