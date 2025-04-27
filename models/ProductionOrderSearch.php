@@ -11,13 +11,17 @@ use app\models\ProductionOrder;
  */
 class ProductionOrderSearch extends ProductionOrder
 {
+    
+    public $productionLine;
+    public $productionArticle;
+    
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'production_line_id', 'production_article_id'], 'integer'],
+            [['productionLine', 'productionArticle'], 'safe'],
         ];
     }
 
@@ -41,15 +45,32 @@ class ProductionOrderSearch extends ProductionOrder
     public function search($params, $formName = null)
     {
         $query = ProductionOrder::find();
+        
+        $query->joinWith(['productionLine', 'productionArticle']);
+
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $dataProvider->sort->attributes['productionLine'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['production_line.name' => SORT_ASC],
+            'desc' => ['production_line.name' => SORT_DESC],
+        ];
+        
+        $dataProvider->sort->attributes['productionArticle'] = [
+            // The tables are the ones our relation are configured to
+            // in my case they are prefixed with "tbl_"
+            'asc' => ['production_article.item_no' => SORT_ASC],
+            'desc' => ['production_article.item_no' => SORT_DESC],
+        ];
 
         $this->load($params, $formName);
-
+        
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -57,11 +78,23 @@ class ProductionOrderSearch extends ProductionOrder
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'production_line_id' => $this->production_line_id,
-            'production_article_id' => $this->production_article_id,
-        ]);
+        $query->andFilterWhere(['like', 'production_line.name', $this->productionLine])
+            ->andFilterWhere(['like', 'id', $this->id])
+            ->andFilterWhere(['like', 'production_article.item_no', $this->productionArticle]);
+        
+                
+                
+//                [
+//                    'id' => $this->id,
+//                    'production_line.name' => $this->productionLine,
+//                    'production_article_id' => $this->production_article_id,
+//                ]
+//                )
+//                ->addFilterWhere(
+//                    'like', 'prodcutionLine.name', $this-$this->productionLine
+//                )
+                ;
+        
 
         return $dataProvider;
     }

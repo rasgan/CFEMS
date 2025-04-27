@@ -28,10 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'production_line_id',
-            'production_article_id',
+            [
+                'attribute' => 'productionLine',
+                'value' => 'productionLine.name'
+            ],
+            [
+                'attribute' => 'productionArticle',
+                'value' => 'productionArticle.item_no'
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, ProductionOrder $model, $key, $index, $column) {

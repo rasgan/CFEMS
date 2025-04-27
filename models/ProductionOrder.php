@@ -46,8 +46,8 @@ class ProductionOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'production_line_id' => Yii::t('app', 'Production Line ID'),
-            'production_article_id' => Yii::t('app', 'Production Article ID'),
+            'production_line' => Yii::t('app', 'Production Line'),
+            'production_article' => Yii::t('app', 'Production Article'),
         ];
     }
 
